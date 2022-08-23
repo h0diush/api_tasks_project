@@ -12,7 +12,7 @@ def validate_phone(phone):
         raise ValidationError('Номер должен состоять из 9 цифр')
     if phone[0:2] not in CODE_PHONE:
         raise ValidationError(
-            f'Проверьте коды операторов'
+            f'Проверьте коды операторов -> '
             f'{", ".join(_ for _ in CODE_PHONE)}'
         )
     return phone

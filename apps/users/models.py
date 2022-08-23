@@ -16,7 +16,7 @@ class User(AbstractUser):
                              blank=True, help_text='+375XXXXXXXXX')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-    objects = UserManager
+    objects = UserManager()
 
     def get_full_name(self):
         if self.first_name and self.last_name:
@@ -31,4 +31,4 @@ class User(AbstractUser):
 
     class Meta:
         verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пошльзователи'
+        verbose_name_plural = 'Пользователи'
