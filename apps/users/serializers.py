@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from apps.services.utils import get_tags_for_tasks
 from apps.tasks.models import TagModel, TaskModel
 from apps.users.models import User
 
@@ -36,9 +37,7 @@ class TaskForUserSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_tags(obj):
-        tags = obj.tags.all()
-        serializer = TagSerializer(tags, many=True)
-        return serializer.data
+        return get_tags_for_tasks(obj, TagSerializer)
 
     class Meta:
         model = TaskModel
@@ -49,6 +48,11 @@ class TaskForUserSerializer(serializers.ModelSerializer):
 
 class CurrentUserSerializer(serializers.ModelSerializer):
     tasks = serializers.SerializerMethodField()
+    count_tags = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_count_tags(obj):
+        return TagModel.objects.filter(author=obj).count()
 
     @staticmethod
     def get_tasks(obj):
@@ -59,7 +63,15 @@ class CurrentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'phone', 'first_name', 'last_name',
-                  'tasks']
+                  'tasks', 'count_tags']
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username', 'id', 'first_name', 'last_name'
+        ]
 
 
 class TokenSerializer(TokenObtainPairSerializer):

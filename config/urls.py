@@ -6,7 +6,7 @@ from apps.users.views import TokenCreatedView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('apps.users.urls')),
+    path('accounts/', include('apps.users.urls')),
     path('tasks/', include('apps.tasks.urls')),
     path('auth/', TokenCreatedView.as_view(),
          name='token_obtain_pair'),

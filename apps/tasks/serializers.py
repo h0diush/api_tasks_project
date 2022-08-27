@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from apps.tasks.models import TaskModel
+from apps.services.utils import get_tags_for_tasks
+from apps.tasks.models import TagModel, TaskModel
 from apps.users.serializers import TagSerializer
 
 
@@ -11,9 +12,7 @@ class UserTaskListSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_tags(obj):
-        tags = obj.tags.all()
-        serializer = TagSerializer(tags, many=True)
-        return serializer.data
+        return get_tags_for_tasks(obj, TagSerializer)
 
     # def create(self, validated_data):
     #     tags_data = validated_data.pop(tags)
@@ -30,4 +29,18 @@ class CreatedTaskSerializer(serializers.ModelSerializer):
         model = TaskModel
         fields = [
             'name', 'description', 'tags'
+        ]
+
+
+class TagCreatedSerializer(serializers.Serializer):
+    name = serializers.CharField(label='Название тега')
+
+
+class TagListSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format="%H:%M %d.%m.%Y")
+
+    class Meta:
+        model = TagModel
+        fields = [
+            'name', 'created'
         ]

@@ -164,7 +164,7 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
@@ -178,7 +178,7 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {
         'user_create': 'apps.users.serializers.CreatedUserSerializer',
-        # 'user': 'apps.users.api.serializers.UserListSerializer',
+        'user': 'apps.users.serializers.UserListSerializer',
         'current_user': 'apps.users.serializers.CurrentUserSerializer',
         # 'user_list': 'apps.users.api.serializers.CurrentUserSerializer',
     },
@@ -192,8 +192,8 @@ DJOSER = {
         'set_username': ['djoser.permissions.CurrentUserOrAdmin'],
         'user_create': ['rest_framework.permissions.AllowAny'],
         'user_delete': ['djoser.permissions.CurrentUserOrAdmin'],
-        'user': ['rest_framework.permissions.IsAuthenticated'],
-        'user_list': ['rest_framework.permissions.AllowAny'],
+        'user': ['apps.users.permissions.UpdateUserPermissions'],
+        'user_list': ['apps.users.permissions.UpdateForUserOrAdmin'],
         'token_create': ['rest_framework.permissions.AllowAny'],
         'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
     }
